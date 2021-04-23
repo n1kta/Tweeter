@@ -5,7 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
+    <ProjectReference Include="..\Tweeter.DataAccess.MSSQL\Tweeter.DataAccess.MSSQL.csproj" />
+    <ProjectReference Include="..\Tweeter.Domain\Tweeter.Domain.csproj" />
   </ItemGroup>
 
 </Project>
