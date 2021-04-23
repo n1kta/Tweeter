@@ -1,45 +1,53 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Tweeter.Domain.Contracts;
 
 namespace Tweeter.DataAccess.MSSQL.Repositories
 {
-    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
+    public class BaseRepository: IBaseRepository
     {
         private readonly DbContext _context;
-        private readonly DbSet<TEntity> _entities;
 
         public BaseRepository(DbContext context)
         {
             _context = context;
-            _entities = context.Set<TEntity>();
         }
 
-        public TEntity FindById(int id)
+        public void SaveChanges()
         {
-            return _entities.Find(id);
+            _context.SaveChanges();
         }
 
-        public IEnumerable<TEntity> GetAll()
+        public T Get<T>(Expression<Func<T, bool>> predicate = null) where T : class
         {
-            return _entities.AsNoTracking().ToList();
+            return predicate != null ? 
+                _context.Set<T>().FirstOrDefault(predicate) 
+                : _context.Set<T>().FirstOrDefault(); ;
         }
 
-        public IEnumerable<TEntity> Fetch(Func<TEntity, bool> predicate)
+        public IEnumerable<T> GetAll<T>() where T : class
         {
-            return _entities.AsNoTracking().Where(predicate).ToList();
+            return _context.Set<T>().AsNoTracking().ToList();
         }
 
-        public void Create(TEntity entity)
+        public IEnumerable<T> Fetch<T>(Expression<Func<T, bool>> predicate = null) where T : class
+        {
+            return predicate != null ?
+                _context.Set<T>().AsNoTracking().Where(predicate).ToList()
+                : _context.Set<T>().AsNoTracking().ToList();
+        }
+
+        public void Create<T>(T entity) where T : class
         {
             try
             {
                 if (entity == null)
                     throw new ArgumentNullException();
 
-                _entities.Add(entity);
+                _context.Set<T>().Add(entity);
                 _context.SaveChanges();
             }
             catch (ArgumentNullException ex)
@@ -48,14 +56,14 @@ namespace Tweeter.DataAccess.MSSQL.Repositories
             }
         }
 
-        public void Remove(TEntity entity)
+        public void Remove<T>(T entity) where T : class
         {
             try
             {
                 if (entity == null)
                     throw new ArgumentNullException();
 
-                _entities.Remove(entity);
+                _context.Set<T>().Remove(entity);
                 _context.SaveChanges();
             }
             catch (ArgumentNullException ex)
@@ -64,7 +72,7 @@ namespace Tweeter.DataAccess.MSSQL.Repositories
             }
         }
 
-        public void Update(TEntity entity)
+        public void Update<T>(T entity) where T : class
         {
             try
             {

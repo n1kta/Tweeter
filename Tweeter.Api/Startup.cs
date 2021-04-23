@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Tweeter.Application.Services;
 using Tweeter.DataAccess.MSSQL.Context;
 using Tweeter.DataAccess.MSSQL.Repositories;
 using Tweeter.Domain.Contracts;
@@ -25,10 +25,12 @@ namespace Tweeter.Api
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-
             services.AddDbContext<TweeterContext>(x =>
                 x.UseSqlServer(Configuration.GetConnectionString("TweeterContext")));
+
+            services.AddScoped<IBaseRepository, BaseRepository>();
+            services.AddScoped<DbContext, TweeterContext>();
+            services.AddScoped<IAuthService, AuthService>();
 
             services.AddControllers();
         }
@@ -43,13 +45,7 @@ namespace Tweeter.Api
 
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

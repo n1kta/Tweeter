@@ -10,5 +10,7 @@ namespace Tweeter.DataAccess.MSSQL.Context {
         }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<UserProfile> UserProfiles { get; set; }
     }
 }

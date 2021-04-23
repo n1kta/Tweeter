@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 
 namespace Tweeter.Domain.Contracts
 {
-    public interface IBaseRepository<TEntity> where TEntity : class
+    public interface IBaseRepository
     {
-        TEntity FindById(int id);
+        TEntity Get<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class;
 
-        IEnumerable<TEntity> GetAll();
+        IEnumerable<TEntity> GetAll<TEntity>() where TEntity : class;
 
          /// <summary>
          /// Filter entity by property
@@ -15,12 +16,14 @@ namespace Tweeter.Domain.Contracts
          /// <typeparam name="TEntity"></typeparam>
          /// <param name="predicate"></param>
          /// <returns></returns>
-         IEnumerable<TEntity> Fetch(Func<TEntity, bool> predicate);
+         IEnumerable<TEntity> Fetch<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class;
 
-        void Create(TEntity entity);
+        void Create<TEntity>(TEntity entity) where TEntity : class;
 
-         void Remove(TEntity entity);
+         void Remove<TEntity>(TEntity entity) where TEntity : class;
 
-         void Update(TEntity entity);
+         void Update<TEntity>(TEntity entity) where TEntity : class;
+
+         void SaveChanges();
     }
 }
