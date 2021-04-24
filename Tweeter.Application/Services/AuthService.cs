@@ -2,6 +2,10 @@
 using Tweeter.Domain.Contracts;
 using Tweeter.Domain.Dtos;
 using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
 using Tweeter.Application.ExceptionMessage;
 using Tweeter.Application.Helpers;
 
@@ -10,13 +14,10 @@ namespace Tweeter.Application.Services
     public class AuthService : IAuthService
     {
         private readonly IBaseRepository _baseRepository;
-        private readonly ITokenService _tokenService;
 
-        public AuthService(IBaseRepository baseRepository,
-            ITokenService tokenService)
+        public AuthService(IBaseRepository baseRepository)
         {
             _baseRepository = baseRepository;
-            _tokenService = tokenService;
         }
 
         public UserDto Registration(RegistrationDto dto)
@@ -46,7 +47,7 @@ namespace Tweeter.Application.Services
 
                 var result = new UserDto
                 {
-                    Token = _tokenService.GenerateToken(dto)
+                    Token = GenerateToken(dto)
                 };
 
                 return result;
@@ -80,7 +81,7 @@ namespace Tweeter.Application.Services
 
             var result = new UserDto
             {
-                Token = _tokenService.GenerateToken(dto)
+                Token = GenerateToken(dto)
             };
 
             return result;
@@ -89,6 +90,31 @@ namespace Tweeter.Application.Services
         public void Logout()
         {
             throw new System.NotImplementedException();
+        }
+
+        private string GenerateToken(BaseAuthDto dto)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(JwtRegisteredClaimNames.NameId, dto.UserName)
+            };
+
+            var cred = new SigningCredentials(AuthOptionsHelper.GetSymmetricSecurityKey(),
+                SecurityAlgorithms.HmacSha512);
+
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Issuer = AuthOptionsHelper.ISSUER,
+                Audience = AuthOptionsHelper.AUDIENCE,
+                Subject = new ClaimsIdentity(claims),
+                SigningCredentials = cred
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+
+            return tokenHandler.WriteToken(token);
         }
 
         private bool IsUserExist(string userName)
