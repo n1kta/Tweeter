@@ -1,6 +1,8 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
+using Tweeter.Application.ExceptionMessage;
+using Tweeter.Application.Helpers;
 using Tweeter.Application.Services;
 using Tweeter.DataAccess.MSSQL.Entities;
 using Tweeter.Domain.Contracts;
@@ -20,12 +22,16 @@ namespace Tweeter.Tests
                 Password = password
             };
 
+            var encodedPassword = PasswordHelper.EncodePassword(password);
+
             var baseRepositoryMock = new Mock<IBaseRepository>();
             baseRepositoryMock
                 .Setup(m => m.Get<User>(x => x.UserName == dto.UserName))
                 .Returns(() => new User
                 {
-                    UserName = "n1kta"
+                    UserName = userName,
+                    Password = encodedPassword.PasswordHash,
+                    PasswordSalt = encodedPassword.PasswordSalt
                 });
 
             var service = new AuthService(baseRepositoryMock.Object);
@@ -55,18 +61,16 @@ namespace Tweeter.Tests
                 .Returns(() => new User
                 {
                     UserName = "n1kta",
-                    Password = new byte[5],
-                    PasswordSalt = new byte[5]
+                    Password = PasswordHelper.EncodePassword(password).PasswordHash,
+                    PasswordSalt = PasswordHelper.EncodePassword(password).PasswordSalt
                 });
 
             var service = new AuthService(baseRepositoryMock.Object);
 
             // act
-            var result = service.Login(dto);
 
             // assert
-            Assert.Throws<UnauthorizedAccessException>(() => Login_ShouldNotReturnToken(userName, password));
-            Assert.Throws<Exception>(() => Login_ShouldNotReturnToken(userName, password));
+            Assert.That(Assert.Throws<UnauthorizedAccessException>(() => service.Login(dto))?.Message == AuthExceptionMessages.INVALID_USERNAME_OR_PASSWORD);
         }
     }
 }
