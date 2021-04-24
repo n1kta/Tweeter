@@ -2,6 +2,7 @@
 using Tweeter.Domain.Contracts;
 using Tweeter.Domain.Dtos;
 using System;
+using Tweeter.Application.ExceptionMessage;
 using Tweeter.Application.Helpers;
 
 namespace Tweeter.Application.Services
@@ -9,19 +10,22 @@ namespace Tweeter.Application.Services
     public class AuthService : IAuthService
     {
         private readonly IBaseRepository _baseRepository;
+        private readonly ITokenService _tokenService;
 
-        public AuthService(IBaseRepository baseRepository)
+        public AuthService(IBaseRepository baseRepository,
+            ITokenService tokenService)
         {
             _baseRepository = baseRepository;
+            _tokenService = tokenService;
         }
 
         public UserDto Registration(RegistrationDto dto)
         {
-            var isExist = IsUserExist(dto.Email);
+            var isExist = IsUserExist(dto.UserName);
 
             if (isExist)
             {
-                throw new Exception("User already exist. Pleas pick another Email or Username.");
+                throw new Exception(AuthExceptionMessages.USER_ALREADY_EXIST);
             }
 
             var encodedPassword = PasswordHelper.EncodePassword(dto.Password);
@@ -42,8 +46,7 @@ namespace Tweeter.Application.Services
 
                 var result = new UserDto
                 {
-                    UserName = newUser.UserName,
-                    Email = newUser.Email
+                    Token = _tokenService.GenerateToken(dto)
                 };
 
                 return result;
@@ -56,12 +59,12 @@ namespace Tweeter.Application.Services
 
         public UserDto Login(LoginDto dto)
         {
-            var user = _baseRepository.Get<User>(x => x.Email == dto.Email);
+            var user = _baseRepository.Get<User>(x => x.UserName == dto.UserName);
 
             if (user == null)
             {
                 throw new UnauthorizedAccessException(
-                    "Invalid Username or Password. Please try again with another Username or Password.");
+                    AuthExceptionMessages.INVALID_USERNAME_OR_PASSWORD);
             }
 
             var computedHash = PasswordHelper.DecodePassword(user.PasswordSalt, dto.Password);
@@ -71,17 +74,13 @@ namespace Tweeter.Application.Services
                 if (computedHash[i] != user.Password[i])
                 {
                     throw new UnauthorizedAccessException(
-                        "Invalid Username or Password. Please try again with another Username or Password.");
+                        AuthExceptionMessages.INVALID_USERNAME_OR_PASSWORD);
                 }
             }
 
-            // TODO: return token
-
             var result = new UserDto
             {
-                UserName = user.UserName,
-                Email = user.Email,
-                Token = ""
+                Token = _tokenService.GenerateToken(dto)
             };
 
             return result;
@@ -92,9 +91,9 @@ namespace Tweeter.Application.Services
             throw new System.NotImplementedException();
         }
 
-        private bool IsUserExist(string email)
+        private bool IsUserExist(string userName)
         {
-            var user = _baseRepository.Get<User>(x => x.Email == email);
+            var user = _baseRepository.Get<User>(x => x.UserName == userName);
 
             return user != null;
         }

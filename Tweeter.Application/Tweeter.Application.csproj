@@ -5,6 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.14" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.10.2" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Tweeter.DataAccess.MSSQL\Tweeter.DataAccess.MSSQL.csproj" />
     <ProjectReference Include="..\Tweeter.Domain\Tweeter.Domain.csproj" />
   </ItemGroup>

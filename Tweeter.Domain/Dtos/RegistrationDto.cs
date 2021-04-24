@@ -2,11 +2,8 @@
 
 namespace Tweeter.Domain.Dtos
 {
-    public class RegistrationDto
+    public class RegistrationDto : BaseAuthDto
     {
-        [Required] 
-        public string UserName { get; set; }
-
         [Required]
         [EmailAddress]
         public string Email { get; set; }

@@ -4,11 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Tweeter.Application.Services;
+using Tweeter.Application.Extensions;
 using Tweeter.DataAccess.MSSQL.Context;
-using Tweeter.DataAccess.MSSQL.Repositories;
-using Tweeter.Domain.Contracts;
-
 
 namespace Tweeter.Api
 {
@@ -28,9 +25,8 @@ namespace Tweeter.Api
             services.AddDbContext<TweeterContext>(x =>
                 x.UseSqlServer(Configuration.GetConnectionString("TweeterContext")));
 
-            services.AddScoped<IBaseRepository, BaseRepository>();
-            services.AddScoped<DbContext, TweeterContext>();
-            services.AddScoped<IAuthService, AuthService>();
+            services.AddApplicationServices();
+            services.AddIdentityServices();
 
             services.AddControllers();
         }
@@ -44,6 +40,10 @@ namespace Tweeter.Api
             }
 
             app.UseRouting();
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
