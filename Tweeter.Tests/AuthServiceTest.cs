@@ -34,7 +34,8 @@ namespace Tweeter.Tests
                     PasswordSalt = encodedPassword.PasswordSalt
                 });
 
-            var service = new AuthService(baseRepositoryMock.Object);
+            var jwtService = new JwtService();
+            var service = new AuthService(baseRepositoryMock.Object, jwtService);
 
             // act
             var result = service.Login(dto);
@@ -60,12 +61,13 @@ namespace Tweeter.Tests
                 .Setup(m => m.Get<User>(x => x.UserName == dto.UserName))
                 .Returns(() => new User
                 {
-                    UserName = "n1kta",
+                    UserName = userName,
                     Password = PasswordHelper.EncodePassword(password).PasswordHash,
                     PasswordSalt = PasswordHelper.EncodePassword(password).PasswordSalt
                 });
 
-            var service = new AuthService(baseRepositoryMock.Object);
+            var jwtService = new JwtService();
+            var service = new AuthService(baseRepositoryMock.Object, jwtService);
 
             // act
 

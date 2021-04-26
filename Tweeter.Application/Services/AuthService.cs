@@ -14,10 +14,13 @@ namespace Tweeter.Application.Services
     public class AuthService : IAuthService
     {
         private readonly IBaseRepository _baseRepository;
+        private readonly IJwtService _jwtService;
 
-        public AuthService(IBaseRepository baseRepository)
+        public AuthService(IBaseRepository baseRepository,
+            IJwtService jwtService)
         {
             _baseRepository = baseRepository;
+            _jwtService = jwtService;
         }
 
         public UserDto Registration(RegistrationDto dto)
@@ -47,7 +50,7 @@ namespace Tweeter.Application.Services
 
                 var result = new UserDto
                 {
-                    Token = GenerateToken(dto)
+                    Token = _jwtService.GenerateToken(dto)
                 };
 
                 return result;
@@ -81,7 +84,7 @@ namespace Tweeter.Application.Services
 
             var result = new UserDto
             {
-                Token = GenerateToken(dto)
+                Token = _jwtService.GenerateToken(dto)
             };
 
             return result;
@@ -90,31 +93,6 @@ namespace Tweeter.Application.Services
         public void Logout()
         {
             throw new System.NotImplementedException();
-        }
-
-        private string GenerateToken(BaseAuthDto dto)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(JwtRegisteredClaimNames.NameId, dto.UserName)
-            };
-
-            var cred = new SigningCredentials(AuthOptionsHelper.GetSymmetricSecurityKey(),
-                SecurityAlgorithms.HmacSha512);
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Issuer = AuthOptionsHelper.ISSUER,
-                Audience = AuthOptionsHelper.AUDIENCE,
-                Subject = new ClaimsIdentity(claims),
-                SigningCredentials = cred
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-
-            return tokenHandler.WriteToken(token);
         }
 
         private bool IsUserExist(string userName)
