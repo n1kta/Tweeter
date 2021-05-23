@@ -28,6 +28,8 @@ namespace Tweeter.Api
             services.AddApplicationServices();
             services.AddIdentityServices();
 
+            services.AddCors();
+
             services.AddControllers();
         }
 
@@ -40,6 +42,10 @@ namespace Tweeter.Api
             }
 
             app.UseRouting();
+
+            app.UseCors(builder => builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseAuthentication();
 

@@ -2,12 +2,9 @@
 using Tweeter.Domain.Contracts;
 using Tweeter.Domain.Dtos;
 using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
 using Tweeter.Application.ExceptionMessage;
 using Tweeter.Application.Helpers;
+using Tweeter.Domain.HelperModels;
 
 namespace Tweeter.Application.Services
 {
@@ -23,9 +20,15 @@ namespace Tweeter.Application.Services
             _jwtService = jwtService;
         }
 
-        public UserDto Registration(RegistrationDto dto)
+        public ResultHelperModel Registration(RegistrationDto dto)
         {
             var isExist = IsUserExist(dto.UserName);
+
+            var result = new ResultHelperModel
+            {
+                IsSuccess = false,
+                ErrorMessage = null
+            };
 
             if (isExist)
             {
@@ -48,10 +51,7 @@ namespace Tweeter.Application.Services
                 _baseRepository.Create<User>(newUser);
                 _baseRepository.SaveChanges();
 
-                var result = new UserDto
-                {
-                    Token = _jwtService.GenerateToken(dto)
-                };
+                result.IsSuccess = true;
 
                 return result;
             }

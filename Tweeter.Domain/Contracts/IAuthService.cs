@@ -1,10 +1,11 @@
 ﻿using Tweeter.Domain.Dtos;
+using Tweeter.Domain.HelperModels;
 
 namespace Tweeter.Domain.Contracts
 {
     public interface IAuthService
     {
-        UserDto Registration(RegistrationDto dto);
+        ResultHelperModel Registration(RegistrationDto dto);
 
         UserDto Login(LoginDto dto);
 
