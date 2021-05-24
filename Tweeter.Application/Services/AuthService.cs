@@ -37,6 +37,7 @@ namespace Tweeter.Application.Services
 
             var encodedPassword = PasswordHelper.EncodePassword(dto.Password);
 
+            // TODO: using mapping
             var newUser = new User
             {
                 UserName = dto.UserName,
@@ -49,6 +50,7 @@ namespace Tweeter.Application.Services
             try
             {
                 _baseRepository.Create<User>(newUser);
+
                 _baseRepository.SaveChanges();
 
                 result.IsSuccess = true;

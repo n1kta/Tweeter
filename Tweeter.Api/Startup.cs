@@ -25,6 +25,7 @@ namespace Tweeter.Api
             services.AddDbContext<TweeterContext>(x =>
                 x.UseSqlServer(Configuration.GetConnectionString("TweeterContext")));
 
+            services.AddHttpContextAccessor();
             services.AddApplicationServices();
             services.AddIdentityServices();
 
