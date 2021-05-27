@@ -18,6 +18,12 @@ namespace Tweeter.Domain.Contracts
          /// <returns></returns>
          IEnumerable<TEntity> Fetch<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class;
 
+         IEnumerable<TEntity> GetAllWithInclude<TEntity>(params Expression<Func<TEntity, object>>[] includeProperties) where TEntity : class;
+
+         IEnumerable<TEntity> GetAllWithInclude<TEntity>(Func<TEntity, bool> predicate, params Expression<Func<TEntity, object>>[] includeProperties) where TEntity : class;
+
+        TEntity GetWithInclude<TEntity>(Func<TEntity, bool> predicate, params Expression<Func<TEntity, object>>[] includeProperties) where TEntity : class;
+
         void Create<TEntity>(TEntity entity) where TEntity : class;
 
          void Remove<TEntity>(TEntity entity) where TEntity : class;

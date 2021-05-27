@@ -15,6 +15,7 @@ namespace Tweeter.Application.Extensions
             services.AddScoped<DbContext, TweeterContext>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IUserProfileService, UserProfileService>();
 
             services.AddTransient<IJwtService, JwtService>();
 

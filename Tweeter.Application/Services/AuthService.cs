@@ -12,12 +12,15 @@ namespace Tweeter.Application.Services
     {
         private readonly IBaseRepository _baseRepository;
         private readonly IJwtService _jwtService;
+        private readonly IUserProfileService _userProfileService;
 
         public AuthService(IBaseRepository baseRepository,
-            IJwtService jwtService)
+                           IJwtService jwtService,
+                           IUserProfileService userProfileService)
         {
             _baseRepository = baseRepository;
             _jwtService = jwtService;
+            _userProfileService = userProfileService;
         }
 
         public ResultHelperModel Registration(RegistrationDto dto)
@@ -37,7 +40,6 @@ namespace Tweeter.Application.Services
 
             var encodedPassword = PasswordHelper.EncodePassword(dto.Password);
 
-            // TODO: using mapping
             var newUser = new User
             {
                 UserName = dto.UserName,
@@ -49,9 +51,8 @@ namespace Tweeter.Application.Services
 
             try
             {
-                _baseRepository.Create<User>(newUser);
-
-                _baseRepository.SaveChanges();
+                _baseRepository.Create(newUser);
+                _userProfileService.Create(newUser.Id, dto.UserProfile);
 
                 result.IsSuccess = true;
 

@@ -1,15 +1,15 @@
-﻿namespace Tweeter.Domain.Dtos
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Tweeter.Domain.Dtos
 {
     public class UserProfileDto
     {
-        public string FirstName { get; set; }
-
-        public string LastName { get; set; }
+        public string FullName { get; set; }
 
         public string BIO { get; set; }
 
         public string Photo { get; set; }
 
-        public short Phone { get; set; }
+        public string Phone { get; set; }
     }
 }

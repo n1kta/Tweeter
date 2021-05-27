@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Tweeter.Application.Extensions;
+using Tweeter.Application.Helpers;
 using Tweeter.DataAccess.MSSQL.Context;
 
 namespace Tweeter.Api
@@ -28,6 +29,7 @@ namespace Tweeter.Api
             services.AddHttpContextAccessor();
             services.AddApplicationServices();
             services.AddIdentityServices();
+            services.AddAutoMapper(typeof(AutoMapperHelper).Assembly);
 
             services.AddCors();
 

@@ -15,5 +15,7 @@ namespace Tweeter.Domain.Dtos
         [Required]
         [StringLength(24, MinimumLength = 8)]
         public string RepeatPassword { get; set; }
+
+        public UserProfileDto UserProfile { get; set; }
     }
 }

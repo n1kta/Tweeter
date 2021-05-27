@@ -10,7 +10,7 @@ using Tweeter.DataAccess.MSSQL.Context;
 namespace Tweeter.DataAccess.MSSQL.Migrations
 {
     [DbContext(typeof(TweeterContext))]
-    [Migration("20210523125257_Init")]
+    [Migration("20210525134643_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -169,10 +169,7 @@ namespace Tweeter.DataAccess.MSSQL.Migrations
                     b.Property<string>("BIO")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
+                    b.Property<string>("FullName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ModifiedDate")
