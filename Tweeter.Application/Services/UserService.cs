@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Tweeter.Application.Helpers;
@@ -28,14 +29,30 @@ namespace Tweeter.Application.Services
             _jwtService = jwtService;
         }
 
-        public UserInfoDto GetCurrentUser()
+        public UserDto GetCurrentUser()
         {
             var user = GetCurrentUserByToken();
 
             _mapper.Map<UserProfileDto>(user.UserProfile);
 
-            var result = _mapper.Map<UserInfoDto>(user);
+            var result = _mapper.Map<UserDto>(user);
 
+            return result;
+        }
+
+        public ViewProfileDto GetViewProfileByUserName(string userName)
+        {
+            var user = _baseRepository.GetWithInclude<User>(u => u.UserName == userName, x => x.UserProfile);
+
+            if (user == null)
+                throw new Exception("This user doesn't exist.");
+
+            _mapper.Map<UserProfileDto>(user.UserProfile);
+            
+            var result = _mapper.Map<ViewProfileDto>(user);
+            result.Following = 2569;
+            result.Followers = 10080;
+            
             return result;
         }
 

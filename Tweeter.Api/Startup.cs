@@ -29,7 +29,7 @@ namespace Tweeter.Api
             services.AddHttpContextAccessor();
             services.AddApplicationServices();
             services.AddIdentityServices();
-            services.AddAutoMapper(typeof(AutoMapperHelper).Assembly);
+            services.AddAutoMapper(typeof(AutoMapperExtension).Assembly);
 
             services.AddCors();
 

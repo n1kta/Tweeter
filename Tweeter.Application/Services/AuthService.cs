@@ -64,7 +64,7 @@ namespace Tweeter.Application.Services
             }
         }
 
-        public UserDto Login(LoginDto dto)
+        public TokenUserDto Login(LoginDto dto)
         {
             var user = _baseRepository.Get<User>(x => x.UserName == dto.UserName);
 
@@ -85,7 +85,7 @@ namespace Tweeter.Application.Services
                 }
             }
 
-            var result = new UserDto
+            var result = new TokenUserDto
             {
                 Token = _jwtService.GenerateToken(dto)
             };

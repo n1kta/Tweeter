@@ -9,7 +9,7 @@ namespace Tweeter.Api.Controllers
     public class UserProfileController : ControllerBase
     {
         private readonly IUserProfileService _userProfile;
-        
+
         public UserProfileController(IUserProfileService userProfile)
         {
             _userProfile = userProfile;
@@ -20,6 +20,15 @@ namespace Tweeter.Api.Controllers
         {
             var result = _userProfile.Update(userId, dto);
             
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("follow")]
+        public IActionResult Follow([FromBody]FollowDto dto)
+        {
+            var result = _userProfile.ToggleFollow(dto);
+
             return Ok(result);
         }
     }

@@ -4,6 +4,8 @@ namespace Tweeter.Domain.Contracts
 {
     public interface IUserService
     {
-        UserInfoDto GetCurrentUser();
+        UserDto GetCurrentUser();
+
+        ViewProfileDto GetViewProfileByUserName(string userName);
     }
 }

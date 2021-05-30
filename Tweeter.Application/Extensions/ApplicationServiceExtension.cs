@@ -18,6 +18,7 @@ namespace Tweeter.Application.Extensions
             services.AddScoped<IUserProfileService, UserProfileService>();
 
             services.AddTransient<IJwtService, JwtService>();
+            services.AddTransient<ITweetService, TweetService>();
 
             return services;
         }

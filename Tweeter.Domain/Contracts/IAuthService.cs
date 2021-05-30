@@ -7,7 +7,7 @@ namespace Tweeter.Domain.Contracts
     {
         ResultHelperModel Registration(RegistrationDto dto);
 
-        UserDto Login(LoginDto dto);
+        TokenUserDto Login(LoginDto dto);
 
         void Logout();
     }
