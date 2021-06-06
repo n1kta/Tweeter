@@ -35,7 +35,8 @@ namespace Tweeter.Tests
                 });
 
             var jwtService = new JwtService();
-            var userProfileService = new UserProfileService(baseRepositoryMock.Object, null);
+            var userService = new UserService(null, null, null, null);
+            var userProfileService = new UserProfileService(baseRepositoryMock.Object, null, userService);
             var service = new AuthService(baseRepositoryMock.Object, jwtService, userProfileService);
 
             // act
@@ -68,7 +69,8 @@ namespace Tweeter.Tests
                 });
 
             var jwtService = new JwtService();
-            var userProfileService = new UserProfileService(baseRepositoryMock.Object, null);
+            var userService = new UserService(null, null, null, null);
+            var userProfileService = new UserProfileService(baseRepositoryMock.Object, null, userService);
             var service = new AuthService(baseRepositoryMock.Object, jwtService, userProfileService);
 
             // act

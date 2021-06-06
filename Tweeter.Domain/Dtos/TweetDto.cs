@@ -8,5 +8,9 @@ namespace Tweeter.Domain.Dtos
         public string Description { get; set; }
 
         public string Photo { get; set; }
+
+        public string UserName { get; set; }
+
+        public UserProfileDto UserProfile { get; set; }
     }
 }

@@ -31,5 +31,14 @@ namespace Tweeter.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpGet]
+        [Route("getFollowerFollowing/{userProfileId}")]
+        public IActionResult GetFollowerFollowing(int userProfileId)
+        {
+            var result = _userProfile.GetFollowerFollowing(userProfileId);
+            
+            return Ok(result);
+        }
     }
 }

@@ -7,9 +7,5 @@
         public string UserName { get; set; }
         
         public UserProfileDto UserProfile { get; set; }
-
-        public int Following { get; set; }
-        
-        public int Followers { get; set; }
     }
 }

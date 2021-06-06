@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using AutoMapper;
 using Tweeter.DataAccess.MSSQL.Entities;
 using Tweeter.Domain.Contracts;
@@ -11,14 +12,17 @@ namespace Tweeter.Application.Services
     {
         private readonly IBaseRepository _baseRepository;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
         private const string CAN_NOT_FOLLOW_YOURSELF = "You can't follow to yourself.";
 
         public UserProfileService(IBaseRepository baseRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IUserService userService)
         {
             _baseRepository = baseRepository;
             _mapper = mapper;
+            _userService = userService;
         }
 
         public ResultHelperModel Create(int userId, UserProfileDto dto)
@@ -96,11 +100,12 @@ namespace Tweeter.Application.Services
             {
                 if (isFollowed)
                 {
-                    UnFollow(entity);
+                    _baseRepository.Remove<Follower>(entity);
                 }
                 else
                 {
-                    Follow(dto);
+                    var follow = _mapper.Map<Follower>(dto);
+                    _baseRepository.Create<Follower>(follow);
                 }
             }
             catch (Exception ex)
@@ -112,15 +117,24 @@ namespace Tweeter.Application.Services
             return result;
         }
 
-        private void Follow(FollowDto dto)
+        public FollowerDto GetFollowerFollowing(int userProfileId)
         {
-            var follow = _mapper.Map<Follower>(dto);
-            _baseRepository.Create<Follower>(follow);
-        }
+            var followers = _baseRepository.Fetch<Follower>(x => x.ToUserId == userProfileId).ToList();
+            var followings = _baseRepository.Fetch<Follower>(x => x.FromUserId == userProfileId).ToList();
 
-        private void UnFollow(Follower entity)
-        {
-            _baseRepository.Remove<Follower>(entity);
+            var currentUserProfile = _userService.GetCurrentUser();
+            var isFollowed =
+                _baseRepository.Get<Follower>(x => x.FromUserId == currentUserProfile.UserProfile.Id
+                                                   && x.ToUserId == userProfileId) != null;
+
+            var result = new FollowerDto
+            {
+                Followers = followers.Count(),
+                Followings = followings.Count(),
+                IsCurrentUserProfileFollowed = isFollowed
+            };
+
+            return result;
         }
     }
 }

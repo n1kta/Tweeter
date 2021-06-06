@@ -48,11 +48,9 @@ namespace Tweeter.Application.Services
                 throw new Exception("This user doesn't exist.");
 
             _mapper.Map<UserProfileDto>(user.UserProfile);
-            
+
             var result = _mapper.Map<ViewProfileDto>(user);
-            result.Following = 2569;
-            result.Followers = 10080;
-            
+
             return result;
         }
 

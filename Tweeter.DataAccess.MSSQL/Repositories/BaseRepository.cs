@@ -28,27 +28,32 @@ namespace Tweeter.DataAccess.MSSQL.Repositories
                 : _context.Set<T>().FirstOrDefault(); ;
         }
 
-        public virtual IEnumerable<T> GetAll<T>() where T : class
+        public virtual IQueryable<T> GetAll<T>() where T : class
         {
-            return _context.Set<T>().AsNoTracking().ToList();
+            return _context.Set<T>().AsNoTracking();
         }
 
-        public virtual IEnumerable<T> Fetch<T>(Expression<Func<T, bool>> predicate = null) where T : class
+        public virtual IQueryable<T> Fetch<T>(Expression<Func<T, bool>> predicate = null) where T : class
         {
             return predicate != null ?
-                _context.Set<T>().AsNoTracking().Where(predicate).ToList()
-                : _context.Set<T>().AsNoTracking().ToList();
+                _context.Set<T>().AsNoTracking().Where(predicate)
+                : _context.Set<T>().AsNoTracking() ;
         }
 
-        public IEnumerable<T> GetAllWithInclude<T>(params Expression<Func<T, object>>[] includeProperties) where T : class
+        public IQueryable<T> GetAllWithInclude<T>(params Expression<Func<T, object>>[] includeProperties) where T : class
         {
-            return Include(includeProperties).ToList();
+            return Include(includeProperties);
         }
 
-        public IEnumerable<T> GetAllWithInclude<T>(Func<T, bool> predicate, params Expression<Func<T, object>>[] includeProperties) where T : class
+        class Bookl
+        {
+            public int Id { get; set; }
+        }
+        
+        public IQueryable<T> GetAllWithInclude<T>(Func<T, bool> predicate, params Expression<Func<T, object>>[] includeProperties) where T : class
         {
             var query = Include(includeProperties);
-            return query.Where(predicate).ToList();
+            return query.Where(predicate).AsQueryable();
         }
 
         public TEntity GetWithInclude<TEntity>(Func<TEntity, bool> predicate, params Expression<Func<TEntity, object>>[] includeProperties) where TEntity : class
@@ -57,7 +62,7 @@ namespace Tweeter.DataAccess.MSSQL.Repositories
             return query.FirstOrDefault(predicate);
         }
 
-        protected IEnumerable<TEntity> Include<TEntity>(params Expression<Func<TEntity, object>>[] includeProperties) where TEntity : class
+        protected IQueryable<TEntity> Include<TEntity>(params Expression<Func<TEntity, object>>[] includeProperties) where TEntity : class
         {
             var query = _context.Set<TEntity>().AsNoTracking<TEntity>();
             return includeProperties.Aggregate(query, (current, includeProperty) => current.Include(includeProperty));

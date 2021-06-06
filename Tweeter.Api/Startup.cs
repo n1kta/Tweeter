@@ -1,8 +1,10 @@
+using System.IO;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Tweeter.Application.Extensions;
 using Tweeter.Application.Helpers;
@@ -53,6 +55,19 @@ namespace Tweeter.Api
             app.UseAuthentication();
 
             app.UseAuthorization();
+            
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Resources/Images")),
+                RequestPath = "/Resources/Images"
+            });
+            
+            app.UseDirectoryBrowser(new DirectoryBrowserOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "Resources/Images")),
+                RequestPath = "/Resources/Images"
+            });
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

@@ -10,5 +10,7 @@ namespace Tweeter.Domain.Contracts
         ResultHelperModel Update(int userId, UserProfileDto dto);
 
         ResultHelperModel ToggleFollow(FollowDto dto);
+
+        FollowerDto GetFollowerFollowing(int userProfileId);
     }
 }
