@@ -4,6 +4,8 @@ namespace Tweeter.Domain.Dtos
 {
     public class TweetDto
     {
+        public int Id { get; set; }
+        
         [Required]
         public string Description { get; set; }
 
@@ -12,5 +14,9 @@ namespace Tweeter.Domain.Dtos
         public string UserName { get; set; }
 
         public UserProfileDto UserProfile { get; set; }
+
+        public int Likes { get; set; }
+
+        public bool? IsLiked { get; set; }
     }
 }

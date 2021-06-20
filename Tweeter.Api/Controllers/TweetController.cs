@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Features;
 using Tweeter.Domain.Contracts;
 using Tweeter.Domain.Dtos;
 
@@ -9,10 +10,13 @@ namespace Tweeter.Api.Controllers
     public class TweetController : ControllerBase
     {
         private readonly ITweetService _tweetService;
+        private readonly ILikeService _likeService;
         
-        public TweetController(ITweetService tweetService)
+        public TweetController(ITweetService tweetService,
+                                ILikeService likeService)
         {
             _tweetService = tweetService;
+            _likeService = likeService;
         }
         
         [HttpPost("{userId}")]
@@ -32,6 +36,15 @@ namespace Tweeter.Api.Controllers
         public IActionResult GetTweetsFollowers(int userProfileId)
         {
             var result = _tweetService.GetTweetsFollowers(userProfileId);
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Route("like")]
+        public IActionResult Like([FromBody] LikeDto dto)
+        {
+            var result = _likeService.ToggleLike(dto);
 
             return Ok(result);
         }

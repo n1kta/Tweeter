@@ -45,11 +45,6 @@ namespace Tweeter.DataAccess.MSSQL.Repositories
             return Include(includeProperties);
         }
 
-        class Bookl
-        {
-            public int Id { get; set; }
-        }
-        
         public IQueryable<T> GetAllWithInclude<T>(Func<T, bool> predicate, params Expression<Func<T, object>>[] includeProperties) where T : class
         {
             var query = Include(includeProperties);

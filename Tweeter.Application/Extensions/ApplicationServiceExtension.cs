@@ -20,6 +20,7 @@ namespace Tweeter.Application.Extensions
 
             services.AddTransient<IJwtService, JwtService>();
             services.AddTransient<ITweetService, TweetService>();
+            services.AddTransient<ILikeService, TweetService>();
 
             return services;
         }

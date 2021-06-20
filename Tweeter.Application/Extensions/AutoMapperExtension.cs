@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using Tweeter.DataAccess.MSSQL.Entities;
 using Tweeter.Domain.Dtos;
@@ -18,7 +19,9 @@ namespace Tweeter.Application.Extensions
             CreateMap<FollowDto, Follower>()
                 .ForMember(entity => entity.FromUserId, src => src.MapFrom(x => x.SourceId))
                 .ForMember(entity => entity.ToUserId, src => src.MapFrom(x => x.DestinationId));
-
+            CreateMap<LikeDto, TweetLike>()
+                .ForMember(entity => entity.TweetId, src => src.MapFrom(x => x.DestinationId));
+            
             // From Entity to Dto
             CreateMap<UserProfile, UserProfileDto>()
                 .ForAllMembers(dto => dto.Condition((src, dest, srcMember) => srcMember != null && srcMember.ToString() != ""));
@@ -26,7 +29,8 @@ namespace Tweeter.Application.Extensions
                 .ForMember(dto => dto.UserProfile, src => src.MapFrom(x => x.UserProfile));
             CreateMap<User, ViewProfileDto>();
             CreateMap<Tweet, TweetDto>()
-                .ForMember(dto => dto.UserName, src => src.MapFrom(x => x.UserProfile.User.UserName));
+                .ForMember(dto => dto.UserName, src => src.MapFrom(x => x.UserProfile.User.UserName))
+                .ForMember(dto => dto.Likes, src => src.MapFrom(x => x.TweetLikes.Count));
         }
     }
 }

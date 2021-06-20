@@ -94,11 +94,10 @@ namespace Tweeter.Application.Services
             var entity =
                 _baseRepository.Get<Follower>(x => x.FromUserId == dto.SourceId
                                                    && x.ToUserId == dto.DestinationId);
-            var isFollowed = entity != null;
-
+            
             try
             {
-                if (isFollowed)
+                if (entity != null)
                 {
                     _baseRepository.Remove<Follower>(entity);
                 }

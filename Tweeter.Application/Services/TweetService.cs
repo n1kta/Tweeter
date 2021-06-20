@@ -9,7 +9,7 @@ using Tweeter.Domain.HelperModels;
 
 namespace Tweeter.Application.Services
 {
-    public class TweetService : ITweetService
+    public class TweetService : ITweetService, ILikeService
     {
         private readonly IBaseRepository _baseRepository;
         private readonly IMapper _mapper;
@@ -68,13 +68,55 @@ namespace Tweeter.Application.Services
         public IEnumerable<TweetDto> GetTweetsFollowers(int userProfileId)
         {
             var followers = _baseRepository.Fetch<Follower>(x => x.FromUser.Id == userProfileId).ToList();
+            var tweetLikes = _baseRepository.GetAll<TweetLike>();
             
             var tweets =
                 _baseRepository.GetAllWithInclude<Tweet>(t => followers.Any(x => x.ToUserId == t.UserProfile.Id),
                     x => x.UserProfile,
-                    y => y.UserProfile.User).ToList();
+                    y => y.UserProfile.User,
+                    z => z.TweetLikes).ToList();
 
             var result = _mapper.Map<IEnumerable<TweetDto>>(tweets);
+
+            if (result != null)
+            {
+                foreach (var res in result)
+                {
+                    res.IsLiked = tweetLikes.Any(x => x.UserProfileId == userProfileId && x.TweetId == res.Id);
+                }
+            }
+            
+            return result;
+        }
+
+        public ResultHelperModel ToggleLike(LikeDto dto)
+        {
+            var result = new ResultHelperModel
+            {
+                IsSuccess = true,
+                ErrorMessage = string.Empty
+            };
+
+            var entity = _baseRepository.Get<TweetLike>(x =>
+                x.UserProfileId == dto.UserProfileId && x.TweetId == dto.DestinationId);
+
+            try
+            {
+                if (entity != null)
+                {
+                    _baseRepository.Remove(entity);
+                }
+                else
+                {
+                    var like = _mapper.Map<TweetLike>(dto);
+                    _baseRepository.Create(like);
+                }
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.ErrorMessage = ex.Message;
+            }
 
             return result;
         }
