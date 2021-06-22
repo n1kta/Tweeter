@@ -48,5 +48,14 @@ namespace Tweeter.Api.Controllers
 
             return Ok(result);
         }
+
+        [HttpPost]
+        [Route("addComment")]
+        public IActionResult AddComment(CommentDto dto)
+        {
+            var result = _tweetService.AddComment(dto);
+
+            return Ok(result);
+        }
     }
 }

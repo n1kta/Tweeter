@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
-using Tweeter.DataAccess.MSSQL.Entities;
 using Tweeter.Domain.Contracts;
 using Tweeter.Domain.Dtos;
+using Tweeter.Domain.Entities;
 using Tweeter.Domain.HelperModels;
 
 namespace Tweeter.Application.Services
@@ -65,6 +65,11 @@ namespace Tweeter.Application.Services
             return result;
         }
 
+        public ResultHelperModel Create(int userId, TweetDto dto)
+        {
+            throw new NotImplementedException();
+        }
+
         public IEnumerable<TweetDto> GetTweetsFollowers(int userProfileId)
         {
             var followers = _baseRepository.Fetch<Follower>(x => x.FromUser.Id == userProfileId).ToList();
@@ -72,10 +77,11 @@ namespace Tweeter.Application.Services
             
             var tweets =
                 _baseRepository.GetAllWithInclude<Tweet>(t => followers.Any(x => x.ToUserId == t.UserProfile.Id),
-                    x => x.UserProfile,
-                    y => y.UserProfile.User,
-                    z => z.TweetLikes).ToList();
-
+                    up => up.UserProfile,
+                    u => u.UserProfile.User,
+                    t => t.TweetLikes,
+                    c => c.Comments).ToList();
+            
             var result = _mapper.Map<IEnumerable<TweetDto>>(tweets);
 
             if (result != null)
@@ -84,6 +90,30 @@ namespace Tweeter.Application.Services
                 {
                     res.IsLiked = tweetLikes.Any(x => x.UserProfileId == userProfileId && x.TweetId == res.Id);
                 }
+            }
+            
+            return result;
+        }
+
+        public ResultHelperModel AddComment(CommentDto dto)
+        {
+            var result = new ResultHelperModel
+            {
+                IsSuccess = true,
+                ErrorMessage = string.Empty
+            };
+
+            try
+            {
+                var comment = _mapper.Map<Comment>(dto);
+                comment.AddedDate = DateTime.Now;
+
+                _baseRepository.Create(comment);
+            }
+            catch (Exception ex)
+            {
+                result.IsSuccess = false;
+                result.ErrorMessage = ex.Message;
             }
             
             return result;
@@ -119,6 +149,16 @@ namespace Tweeter.Application.Services
             }
 
             return result;
+        }
+
+        IEnumerable ITweetService.GetTweetsFollowers(int userId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ResultHelperModel ToggleLike(LikeDto dto)
+        {
+            throw new NotImplementedException();
         }
     }
 }
