@@ -9,5 +9,7 @@ namespace Tweeter.Domain.Contracts
         ResultHelperModel Create(int userId, TweetDto dto);
 
         IEnumerable<TweetDto> GetTweetsFollowers(int userId);
+
+        ResultHelperModel AddComment(CommentDto dto);
     }
 }

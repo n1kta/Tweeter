@@ -12,6 +12,7 @@ namespace Tweeter.Application.Extensions
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             services.AddScoped<IBaseRepository, BaseRepository>();
+            services.AddScoped<ITweeterRepository, TweeterRepository>();
             services.AddScoped<DbContext, TweeterContext>();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();

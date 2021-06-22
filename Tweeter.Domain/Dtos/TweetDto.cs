@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Tweeter.Domain.Dtos
 {
@@ -14,6 +17,10 @@ namespace Tweeter.Domain.Dtos
         public string UserName { get; set; }
 
         public UserProfileDto UserProfile { get; set; }
+        
+        public IEnumerable<CommentDto> Comments { get; set; }
+
+        public DateTime AddedDate { get; set; }
 
         public int Likes { get; set; }
 

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using AutoMapper;
+using Tweeter.DataAccess.MSSQL.Entities;
+using Tweeter.DataAccess.MSSQL.Repositories;
 using Tweeter.Domain.Contracts;
 using Tweeter.Domain.Dtos;
-using Tweeter.Domain.Entities;
 using Tweeter.Domain.HelperModels;
 
 namespace Tweeter.Application.Services
@@ -12,14 +14,17 @@ namespace Tweeter.Application.Services
     public class TweetService : ITweetService, ILikeService
     {
         private readonly IBaseRepository _baseRepository;
+        private readonly ITweeterRepository _tweeterRepository;
         private readonly IMapper _mapper;
         private readonly IFileUploader _fileUploader;
         
         public TweetService(IBaseRepository baseRepository,
+                            ITweeterRepository tweeterRepository,
                             IMapper mapper,
                             IFileUploader fileUploader)
         {
             _baseRepository = baseRepository;
+            _tweeterRepository = tweeterRepository;
             _mapper = mapper;
             _fileUploader = fileUploader;
         }
@@ -65,22 +70,12 @@ namespace Tweeter.Application.Services
             return result;
         }
 
-        public ResultHelperModel Create(int userId, TweetDto dto)
-        {
-            throw new NotImplementedException();
-        }
-
         public IEnumerable<TweetDto> GetTweetsFollowers(int userProfileId)
         {
             var followers = _baseRepository.Fetch<Follower>(x => x.FromUser.Id == userProfileId).ToList();
             var tweetLikes = _baseRepository.GetAll<TweetLike>();
             
-            var tweets =
-                _baseRepository.GetAllWithInclude<Tweet>(t => followers.Any(x => x.ToUserId == t.UserProfile.Id),
-                    up => up.UserProfile,
-                    u => u.UserProfile.User,
-                    t => t.TweetLikes,
-                    c => c.Comments).ToList();
+            var tweets = _tweeterRepository.GetTweetsWithInclude(t => followers.Any(x => x.ToUserId == t.UserProfile.Id)).ToList();
             
             var result = _mapper.Map<IEnumerable<TweetDto>>(tweets);
 
@@ -149,16 +144,6 @@ namespace Tweeter.Application.Services
             }
 
             return result;
-        }
-
-        IEnumerable ITweetService.GetTweetsFollowers(int userId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ResultHelperModel ToggleLike(LikeDto dto)
-        {
-            throw new NotImplementedException();
         }
     }
 }
