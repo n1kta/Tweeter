@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Tweeter.DataAccess.MSSQL.Entities;
 
-namespace Tweeter.DataAccess.MSSQL.Repositories
+namespace Tweeter.DataAccess.MSSQL.Repositories.Contracts
 {
     public interface ITweeterRepository
     {

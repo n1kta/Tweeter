@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using Tweeter.DataAccess.MSSQL.Entities;
+using Tweeter.DataAccess.MSSQL.Repositories.Contracts;
 
 namespace Tweeter.DataAccess.MSSQL.Repositories
 {
@@ -18,7 +20,8 @@ namespace Tweeter.DataAccess.MSSQL.Repositories
                 .Include(u => u.UserProfile.User)
                 .Include(t => t.TweetLikes)
                 .Include(c => c.Comments)
-                .ThenInclude(x => x.UserProfile)
+                    .ThenInclude(x => x.UserProfile)
+                    .ThenInclude(x => x.CommentLikes)
                 .Where(predicate)
                 .OrderByDescending(x => x.AddedDate)
                 .AsQueryable();

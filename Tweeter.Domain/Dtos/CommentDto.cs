@@ -7,6 +7,8 @@ namespace Tweeter.Domain.Dtos
         public string Description { get; set; }
 
         public UserProfileDto UserProfile { get; set; }
+
+        public int Likes { get; set; }
         
         public DateTime AddedDate { get; set; }
     }

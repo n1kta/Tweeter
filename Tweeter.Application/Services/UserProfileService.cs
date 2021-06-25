@@ -2,6 +2,7 @@
 using System.Linq;
 using AutoMapper;
 using Tweeter.DataAccess.MSSQL.Entities;
+using Tweeter.DataAccess.MSSQL.Repositories.Contracts;
 using Tweeter.Domain.Contracts;
 using Tweeter.Domain.Dtos;
 using Tweeter.Domain.HelperModels;

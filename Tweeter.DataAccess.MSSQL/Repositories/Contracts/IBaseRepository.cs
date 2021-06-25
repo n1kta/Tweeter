@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 
-namespace Tweeter.Domain.Contracts
+namespace Tweeter.DataAccess.MSSQL.Repositories.Contracts
 {
     public interface IBaseRepository
     {

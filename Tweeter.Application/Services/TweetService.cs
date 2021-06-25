@@ -5,6 +5,7 @@ using System.Linq;
 using AutoMapper;
 using Tweeter.DataAccess.MSSQL.Entities;
 using Tweeter.DataAccess.MSSQL.Repositories;
+using Tweeter.DataAccess.MSSQL.Repositories.Contracts;
 using Tweeter.Domain.Contracts;
 using Tweeter.Domain.Dtos;
 using Tweeter.Domain.HelperModels;
@@ -74,8 +75,10 @@ namespace Tweeter.Application.Services
         {
             var followers = _baseRepository.Fetch<Follower>(x => x.FromUser.Id == userProfileId).ToList();
             var tweetLikes = _baseRepository.GetAll<TweetLike>();
-            
-            var tweets = _tweeterRepository.GetTweetsWithInclude(t => followers.Any(x => x.ToUserId == t.UserProfile.Id)).ToList();
+
+            var tweets = _tweeterRepository
+                .GetTweetsWithInclude(t => followers.Any(x => x.ToUserId == t.UserProfile.Id))
+                .ToList();
             
             var result = _mapper.Map<IEnumerable<TweetDto>>(tweets);
 
@@ -85,30 +88,6 @@ namespace Tweeter.Application.Services
                 {
                     res.IsLiked = tweetLikes.Any(x => x.UserProfileId == userProfileId && x.TweetId == res.Id);
                 }
-            }
-            
-            return result;
-        }
-
-        public ResultHelperModel AddComment(CommentDto dto)
-        {
-            var result = new ResultHelperModel
-            {
-                IsSuccess = true,
-                ErrorMessage = string.Empty
-            };
-
-            try
-            {
-                var comment = _mapper.Map<Comment>(dto);
-                comment.AddedDate = DateTime.Now;
-
-                _baseRepository.Create(comment);
-            }
-            catch (Exception ex)
-            {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
             }
             
             return result;

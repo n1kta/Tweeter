@@ -4,6 +4,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Tweeter.Application.Helpers;
 using Tweeter.DataAccess.MSSQL.Entities;
+using Tweeter.DataAccess.MSSQL.Repositories.Contracts;
 using Tweeter.Domain.Contracts;
 using Tweeter.Domain.Dtos;
 

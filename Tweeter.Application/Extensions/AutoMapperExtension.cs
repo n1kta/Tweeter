@@ -19,6 +19,8 @@ namespace Tweeter.Application.Extensions
                 .ForMember(entity => entity.ToUserId, src => src.MapFrom(x => x.DestinationId));
             CreateMap<LikeDto, TweetLike>()
                 .ForMember(entity => entity.TweetId, src => src.MapFrom(x => x.DestinationId));
+            CreateMap<LikeDto, CommentLike>()
+                .ForMember(entity => entity.CommentId, src => src.MapFrom(x => x.DestinationId));
             CreateMap<CommentDto, Comment>();
 
             // From Entity to Dto
@@ -28,7 +30,8 @@ namespace Tweeter.Application.Extensions
                 .ForMember(dto => dto.UserProfile, src => src.MapFrom(x => x.UserProfile));
             CreateMap<User, ViewProfileDto>();
             CreateMap<Comment, CommentDto>()
-                .ForMember(dto => dto.UserProfile, src => src.MapFrom(x => x.UserProfile));
+                .ForMember(dto => dto.UserProfile, src => src.MapFrom(x => x.UserProfile))
+                .ForMember(dto => dto.Likes, src => src.MapFrom(x => x.CommentLikes.Count));
             CreateMap<Tweet, TweetDto>()
                 .ForMember(dto => dto.UserName, src => src.MapFrom(x => x.UserProfile.User.UserName))
                 .ForMember(dto => dto.Likes, src => src.MapFrom(x => x.TweetLikes.Count))

@@ -4,6 +4,7 @@ using Tweeter.Domain.Dtos;
 using System;
 using Tweeter.Application.ExceptionMessage;
 using Tweeter.Application.Helpers;
+using Tweeter.DataAccess.MSSQL.Repositories.Contracts;
 using Tweeter.Domain.HelperModels;
 
 namespace Tweeter.Application.Services
