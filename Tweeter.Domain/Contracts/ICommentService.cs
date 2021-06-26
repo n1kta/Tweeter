@@ -5,6 +5,6 @@ namespace Tweeter.Domain.Contracts
 {
     public interface ICommentService
     {
-        ResultHelperModel AddComment(CommentDto dto);
+        ResultHelperModel AddComment(CreatCommentDto dto);
     }
 }

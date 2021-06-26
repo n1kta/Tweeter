@@ -20,7 +20,7 @@ namespace Tweeter.Application.Services
             _mapper = mapper;
         }
         
-        public ResultHelperModel AddComment(CommentDto dto)
+        public ResultHelperModel AddComment(CreatCommentDto dto)
         {
             var result = new ResultHelperModel
             {

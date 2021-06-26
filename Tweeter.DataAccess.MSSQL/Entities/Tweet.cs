@@ -13,5 +13,7 @@ namespace Tweeter.DataAccess.MSSQL.Entities
         public ICollection<Comment> Comments { get; set; }
 
         public ICollection<TweetLike> TweetLikes { get; set; }
+
+        public bool IsEveryoneMode { get; set; }
     }
 }

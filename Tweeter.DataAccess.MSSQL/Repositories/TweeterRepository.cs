@@ -21,6 +21,7 @@ namespace Tweeter.DataAccess.MSSQL.Repositories
                 .Include(t => t.TweetLikes)
                 .Include(c => c.Comments)
                     .ThenInclude(x => x.UserProfile)
+                .Include(c => c.Comments)
                     .ThenInclude(x => x.CommentLikes)
                 .Where(predicate)
                 .OrderByDescending(x => x.AddedDate)

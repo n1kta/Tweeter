@@ -30,7 +30,7 @@ namespace Tweeter.Application.Services
             _fileUploader = fileUploader;
         }
         
-        public ResultHelperModel Create(int userId, TweetDto dto)
+        public ResultHelperModel Create(int userId, CreateTweetDto dto)
         {
             var result = new ResultHelperModel
             {
@@ -75,6 +75,7 @@ namespace Tweeter.Application.Services
         {
             var followers = _baseRepository.Fetch<Follower>(x => x.FromUser.Id == userProfileId).ToList();
             var tweetLikes = _baseRepository.GetAll<TweetLike>();
+            var commentLikes = _baseRepository.GetAll<CommentLike>();
 
             var tweets = _tweeterRepository
                 .GetTweetsWithInclude(t => followers.Any(x => x.ToUserId == t.UserProfile.Id))
@@ -87,6 +88,12 @@ namespace Tweeter.Application.Services
                 foreach (var res in result)
                 {
                     res.IsLiked = tweetLikes.Any(x => x.UserProfileId == userProfileId && x.TweetId == res.Id);
+
+                    foreach (var comment in res.Comments)
+                    {
+                        comment.IsLiked = commentLikes.Any(x =>
+                            x.UserProfileId == userProfileId && x.CommentId == comment.Id);
+                    }
                 }
             }
             

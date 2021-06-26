@@ -6,7 +6,7 @@ namespace Tweeter.Domain.Contracts
 {
     public interface ITweetService
     {
-        ResultHelperModel Create(int userId, TweetDto dto);
+        ResultHelperModel Create(int userId, CreateTweetDto dto);
 
         IEnumerable<TweetDto> GetTweetsFollowers(int userId);
     }

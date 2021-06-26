@@ -14,6 +14,8 @@ namespace Tweeter.Application.Extensions
                 .ForAllMembers(entity => entity.Condition((src, dest, srcMember) => srcMember != null && srcMember.ToString() != ""));
             CreateMap<TweetDto, Tweet>()
                 .ForMember(entity => entity.Photo, src => src.Ignore());
+            CreateMap<CreateTweetDto, Tweet>()
+                .ForMember(entity => entity.Photo, src => src.Ignore());
             CreateMap<FollowDto, Follower>()
                 .ForMember(entity => entity.FromUserId, src => src.MapFrom(x => x.SourceId))
                 .ForMember(entity => entity.ToUserId, src => src.MapFrom(x => x.DestinationId));
@@ -22,6 +24,7 @@ namespace Tweeter.Application.Extensions
             CreateMap<LikeDto, CommentLike>()
                 .ForMember(entity => entity.CommentId, src => src.MapFrom(x => x.DestinationId));
             CreateMap<CommentDto, Comment>();
+            CreateMap<CreatCommentDto, Comment>();
 
             // From Entity to Dto
             CreateMap<UserProfile, UserProfileDto>()
