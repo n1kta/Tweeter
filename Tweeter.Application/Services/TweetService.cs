@@ -34,8 +34,8 @@ namespace Tweeter.Application.Services
         {
             var result = new ResultHelperModel
             {
-                IsSuccess = true,
-                ErrorMessage = string.Empty
+                Success = true,
+                Message = string.Empty
             };
             
             var userProfile = _baseRepository.Get<UserProfile>(x => x.UserId == userId);
@@ -51,8 +51,8 @@ namespace Tweeter.Application.Services
                 }
                 catch (Exception ex)
                 {
-                    result.IsSuccess = false;
-                    result.ErrorMessage = ex.Message;
+                    result.Success = false;
+                    result.Message = ex.Message;
                     return result;
                 }
             }
@@ -63,8 +63,8 @@ namespace Tweeter.Application.Services
             }
             catch (Exception ex)
             {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
+                result.Success = false;
+                result.Message = ex.Message;
                 return result;
             }
             
@@ -104,8 +104,8 @@ namespace Tweeter.Application.Services
         {
             var result = new ResultHelperModel
             {
-                IsSuccess = true,
-                ErrorMessage = string.Empty
+                Success = true,
+                Message = string.Empty
             };
 
             var entity = _baseRepository.Get<TweetLike>(x =>
@@ -125,8 +125,8 @@ namespace Tweeter.Application.Services
             }
             catch (Exception ex)
             {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
+                result.Success = false;
+                result.Message = ex.Message;
             }
 
             return result;

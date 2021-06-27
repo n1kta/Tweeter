@@ -20,48 +20,23 @@ namespace Tweeter.Api.Controllers
         [Route("registration")]
         public IActionResult Register([FromBody]RegistrationDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var result = _authService.Registration(dto);
-
-                    return Ok(result);
-                }
-                catch (Exception ex)
-                {
-                    // TODO: Use ILogger
-                    return BadRequest(ex.ToString());
-                }
-            }
+            if (!ModelState.IsValid) return BadRequest();
             
-            return BadRequest();
+            var result = _authService.Registration(dto);
+
+            return Ok(result);
+
         }
 
         [HttpPost]
         [Route("login")]
         public IActionResult Login([FromBody]LoginDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var result = _authService.Login(dto);
+            if (!ModelState.IsValid) return BadRequest();
+            
+            var result = _authService.Login(dto);
 
-                    return Ok(result);
-                }
-                catch (UnauthorizedAccessException ex)
-                {
-                    // TODO: Use ILogger
-                    return Unauthorized(ex.ToString());
-                }
-                catch (Exception ex)
-                {
-                    // TODO: Use ILogger
-                    return BadRequest(ex.ToString());
-                }
-            }
-            return BadRequest();
+            return Ok(result);
         }
 
         public IActionResult Logout()

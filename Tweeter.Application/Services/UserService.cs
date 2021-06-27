@@ -7,6 +7,7 @@ using Tweeter.DataAccess.MSSQL.Entities;
 using Tweeter.DataAccess.MSSQL.Repositories.Contracts;
 using Tweeter.Domain.Contracts;
 using Tweeter.Domain.Dtos;
+using Tweeter.Domain.HelperModels;
 
 namespace Tweeter.Application.Services
 {
@@ -46,7 +47,7 @@ namespace Tweeter.Application.Services
             var user = _baseRepository.GetWithInclude<User>(u => u.UserName == userName, x => x.UserProfile);
 
             if (user == null)
-                throw new Exception("This user doesn't exist.");
+                throw new ApiException("This user doesn't exist.");
 
             _mapper.Map<UserProfileDto>(user.UserProfile);
 

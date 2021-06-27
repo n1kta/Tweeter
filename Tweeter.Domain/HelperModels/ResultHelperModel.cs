@@ -2,8 +2,8 @@
 {
     public class ResultHelperModel
     {
-        public bool IsSuccess { get; set; }
+        public bool Success { get; set; }
 
-        public string ErrorMessage { get; set; }
+        public string Message { get; set; }
     }
 }

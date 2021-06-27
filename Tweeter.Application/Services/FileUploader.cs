@@ -3,6 +3,7 @@ using System.IO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Tweeter.Domain.Contracts;
+using Tweeter.Domain.HelperModels;
 
 namespace Tweeter.Application.Services
 {
@@ -18,7 +19,7 @@ namespace Tweeter.Application.Services
         public FileUploader(IHostingEnvironment env,
                             IHttpContextAccessor context)
         {
-            _env = env ?? throw new ArgumentNullException(nameof(env));
+            _env = env ?? throw new ApiException(nameof(env));
             _context = context;
         }
         
@@ -38,7 +39,7 @@ namespace Tweeter.Application.Services
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new ApiException(ex.Message);
             }
 
             return photoPath;

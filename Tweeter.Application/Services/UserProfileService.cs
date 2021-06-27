@@ -34,8 +34,8 @@ namespace Tweeter.Application.Services
             
             var result = new ResultHelperModel
             {
-                IsSuccess = true,
-                ErrorMessage = string.Empty
+                Success = true,
+                Message = string.Empty
             };
 
             try
@@ -44,8 +44,8 @@ namespace Tweeter.Application.Services
             }
             catch (Exception ex)
             {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
+                result.Success = false;
+                result.Message = ex.Message;
             }
 
             return result;
@@ -59,8 +59,8 @@ namespace Tweeter.Application.Services
             
             var result = new ResultHelperModel
             {
-                IsSuccess = true,
-                ErrorMessage = string.Empty
+                Success = true,
+                Message = string.Empty
             };
             
             try
@@ -69,8 +69,8 @@ namespace Tweeter.Application.Services
             }
             catch (Exception ex)
             {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
+                result.Success = false;
+                result.Message = ex.Message;
             }
 
             return result;
@@ -80,14 +80,14 @@ namespace Tweeter.Application.Services
         {
             var result = new ResultHelperModel
             {
-                IsSuccess = true,
-                ErrorMessage = string.Empty
+                Success = true,
+                Message = string.Empty
             };
 
             if (dto.SourceId == dto.DestinationId)
             {
-                result.IsSuccess = false;
-                result.ErrorMessage = CAN_NOT_FOLLOW_YOURSELF;
+                result.Success = false;
+                result.Message = CAN_NOT_FOLLOW_YOURSELF;
 
                 return result;
             }
@@ -110,8 +110,8 @@ namespace Tweeter.Application.Services
             }
             catch (Exception ex)
             {
-                result.IsSuccess = false;
-                result.ErrorMessage = ex.Message;
+                result.Success = false;
+                result.Message = ex.Message;
             }
             
             return result;

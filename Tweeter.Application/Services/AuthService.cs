@@ -30,13 +30,13 @@ namespace Tweeter.Application.Services
 
             var result = new ResultHelperModel
             {
-                IsSuccess = false,
-                ErrorMessage = null
+                Success = false,
+                Message = null
             };
 
             if (isExist)
             {
-                throw new Exception(AuthExceptionMessages.USER_ALREADY_EXIST);
+                throw new ApiException(AuthExceptionMessages.USER_ALREADY_EXIST);
             }
 
             var encodedPassword = PasswordHelper.EncodePassword(dto.Password);
@@ -55,13 +55,13 @@ namespace Tweeter.Application.Services
                 _baseRepository.Create(newUser);
                 _userProfileService.Create(newUser.Id, dto.UserProfile);
 
-                result.IsSuccess = true;
+                result.Success = true;
 
                 return result;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.ToString(), ex);
+                throw new ApiException(ex.ToString(), ex);
             }
         }
 

@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Tweeter.Application.Helpers;
 using Tweeter.Domain.Contracts;
 using Tweeter.Domain.Dtos;
+using Tweeter.Domain.HelperModels;
 
 namespace Tweeter.Application.Services
 {
@@ -44,7 +45,7 @@ namespace Tweeter.Application.Services
         {
             token = token.Split(' ')[1];
 
-            if (token == null) throw new Exception(TOKEN_ERROR_EXCEPTION);
+            if (token == null) throw new ApiException(TOKEN_ERROR_EXCEPTION);
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var validations = new TokenValidationParameters
@@ -62,7 +63,7 @@ namespace Tweeter.Application.Services
 
             var result = securityToken.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.NameId)?.Value;
 
-            if (result == null) throw new Exception(INCORRECT_TOKEN);
+            if (result == null) throw new ApiException(INCORRECT_TOKEN);
 
             return result;
         }

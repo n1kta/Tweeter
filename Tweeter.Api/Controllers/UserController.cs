@@ -20,6 +20,7 @@ namespace Tweeter.Api.Controllers
         public IActionResult GetCurrentUser()
         {
             var result = _userService.GetCurrentUser();
+            
             return Ok(result);
         }
 
@@ -28,6 +29,7 @@ namespace Tweeter.Api.Controllers
         public IActionResult GetViewProfileByUserName(string userName)
         {
             var result = _userService.GetViewProfileByUserName(userName);
+            
             return Ok(result);
         }
     }

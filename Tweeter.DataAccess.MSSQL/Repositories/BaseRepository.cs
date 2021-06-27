@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Tweeter.DataAccess.MSSQL.Repositories.Contracts;
 using Tweeter.Domain.Contracts;
+using Tweeter.Domain.HelperModels;
 
 namespace Tweeter.DataAccess.MSSQL.Repositories
 {
@@ -76,7 +77,7 @@ namespace Tweeter.DataAccess.MSSQL.Repositories
             }
             catch (ArgumentNullException ex)
             {
-                throw new Exception(ex.ToString(), ex);
+                throw new ApiException(ex.ToString(), ex);
             }
         }
 
@@ -92,7 +93,7 @@ namespace Tweeter.DataAccess.MSSQL.Repositories
             }
             catch (ArgumentNullException ex)
             {
-                throw new Exception(ex.ToString(), ex);
+                throw new ApiException(ex.ToString(), ex);
             }
         }
 
@@ -108,7 +109,7 @@ namespace Tweeter.DataAccess.MSSQL.Repositories
             }
             catch (ArgumentNullException ex)
             {
-                throw new Exception(ex.ToString(), ex);
+                throw new ApiException(ex.ToString(), ex);
             }
         }
     }
